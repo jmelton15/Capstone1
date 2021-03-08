@@ -1,0 +1,26 @@
+body {
+    background-size:cover;
+    background-image:url("/static/images/travel.jpg");
+    background-repeat: no-repeat;
+}
+#about-us-container {
+    margin-top:0;
+}
+#journal-img {
+    width:100%;
+    height:75vh;
+}
+#aboutus-header {
+    font-family: 'TravelerFont';
+    color: white;
+    margin-bottom:0;
+}
+
+@media only screen and (max-width:900px) {
+    #journal-img {
+        content: url("/static/images/aboutMobilePg1.png") !important;
+    }
+    #journal-img-2 {
+        content: url("/static/images/aboutMobilePg2.png") !important;
+    }
+}

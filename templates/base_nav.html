@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head lang="en">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{% block title %} {% endblock %}</title>
+        <meta name="csrf_token" content="{{session['csrf_token']}}">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/static/bootstrap-5.0.0-beta1-dist/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/base.css">
+        {% block stylesheets %} 
+        {% endblock %}
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand active" href="/login">DTRI</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link " aria-current="page" href="/about">About This App</a>
+                        </li>
+
+                        {% if g.user %}
+                        <li class="nav-item">
+                          <a class="nav-link " aria-current="page" href="/users/{{g.user.id}}/trip">Create Trip</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " aria-current="page" href="/users/{{g.user.id}}/profile">Profile</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                          <a class="nav-link " aria-current="page" href="/register">Create Trip</a>
+                        </li>
+                      {% endif %}
+                    </ul>
+                      <ul class="navbar-nav ml-auto">
+                        {% if g.user %}
+                        <li class="nav-item">
+                          <a class="nav-link a float-end" aria-current="page" href="/logout">Logout</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                          <a class="nav-link " aria-current="page" href="/login">Login/Sign-Up</a>
+                        </li>
+                        {% endif %}
+                      </ul>
+                </div>
+              </div>
+            </nav>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category,message in messages %}
+                <div class="container">
+                  <h4 class="alert {{category}} text-center">{{message}}</h4>
+                </div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+        {% block content %}
+                {% block token %}
+                {% endblock %}
+        {% endblock %}
+
+        <script src="https://unpkg.com/axios/dist/axios.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="/static/bootstrap-5.0.0-beta1-dist/js/bootstrap.min.js"></script>
+        <script src="/static/base.js"></script>
+        <script src="/static/config_js_file.js"></script>
+        {% block scripts %}
+        {% endblock %}
+    </body>
+</html>

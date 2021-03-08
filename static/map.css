@@ -1,0 +1,29 @@
+#map {
+    height: 90vh;
+    width: 100%;
+}
+#trip-btn {
+    width:100px;
+}
+textarea.form-control {
+    height:100px !important;
+}
+#route-form-container {
+    background: lightgrey;
+}
+
+#loader {
+    /* text-align: center; */
+}
+#load-gif {
+    display: inline-block;
+    top:200px;
+    position:absolute;
+    z-index: 5;
+    margin-left:300px;
+}
+@media only screen and (max-width:900px) {
+    #load-gif {
+        margin-left: 0px;
+    }
+}

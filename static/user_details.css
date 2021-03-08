@@ -1,0 +1,109 @@
+body {
+    background: url("/static/images/profile_bg.jpg") no-repeat center;
+    background-size: cover;
+    height:100%;
+}
+#user-name {
+    font-family: 'Wanderlust';
+    border-bottom: 2px solid black;
+    font-size: 50px;
+}
+
+#profile-options {
+    border: 4px solid black;
+    height:78vh;
+    background-color: antiquewhite;
+    position:relative;
+}
+#front-page {
+    margin: auto;
+}
+#flipbook {
+    width: 100%;
+    height: 78vh;
+    margin-top: 30px;
+}
+
+
+#flipbook .shadow,
+#flipbook.shadow{
+  -webkit-box-shadow: 0 6px 15px black;
+  -moz-box-shadow: 0 6px 15px black;
+  -ms-box-shadow: 0 6px 15px black;
+  -o-box-shadow: 0 6px 15px black;
+  box-shadow: 0 6px 15px black;
+}
+
+#front {
+    background-image: url("/static/images/book_cover.jpg") !important;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#flipbook .page {
+    background-image: url('/static/images/pages.jpg');
+    font-family: 'Wanderlust';
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.card {
+    background-color: transparent !important;
+    border: none !important;
+    max-height:75vh;
+}
+.card-body {
+    background:antiquewhite;
+    overflow: scroll;
+}
+.card-img-top {
+    width:100%;
+    height:250px;
+}
+.card-text {
+    font-family: 'Wanderlust';
+}
+#waypoints-in-list {
+    font-family: 'Wanderlust';
+    font-size: 12px;
+}
+.card-title {
+    font-family: 'Wanderlust';
+}
+#travel-cards {
+   margin:0 10px 0 10px;
+   
+}
+
+#turnjs-attr {
+    position:absolute;
+    bottom:0;
+}
+#pixaby-ref {
+    font-size: 10px;
+    text-align: center;
+}
+#col-left {
+    overflow: hidden;
+    overflow-wrap:anywhere;
+}
+
+@media only screen and (max-width:900px) {
+    #profile-options {
+        height:40vh !important;
+    }
+    body {
+        overflow: scroll;
+    }
+    .card-img-top {
+        height:125px !important;
+    }
+    .card-title {
+        font-size:14px !important;
+    }
+    #user-name {
+        font-size:38px;
+    }
+}

@@ -1,0 +1,81 @@
+{% extends "base_nav.html" %}
+{% block title %} My Profile {% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="/static/user_details.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4 col-xs-12 mt-3" id="col-left">
+            <div class="container d-flex flex-column align-items-start" id="profile-options">
+                <h1 class="display-3 text-info text-center" id="user-name" data-un="{{user.username}}">Hello, {{user.username}}</h1>
+                    {{ form.hidden_tag() }}
+                    <!-- add type=hidden form fields -->
+                    <div class="mb-3">
+                        {% for field in form if field.widget.input_type != 'hidden' %}
+                        {{field.label(class_="form-label fw-bolder")}}
+                        {{field(class="form-control")}}
+                        {% for error in field.errors %}
+                        <small class="text-primary">
+                            {{error}}
+                        </small>
+                        {% endfor %}
+                        {% endfor %}
+                        <small class="alert-primary" id="error-code"></small>
+                    </div>
+                    <div class="d-flex" id="user-btns" data-id="{{user.id}}">
+                        <button class="btn btn-success btn-sm" id="update-cc">Update Username</button>
+                        <button class="btn btn-outline-primary btn-sm mx-2" id="delete-acct">Delete Account</button>
+                    </div>
+                    <a class="text-info" id="turnjs-attr" href="http://www.turnjs.com/">Flipbook Code Comes from TurnJs. View It Here!</a>
+            </div>
+        </div>
+        <div class="col-md-8 col-xs-12" id="travel-journal-col">
+            <div id="flipbook">
+                <div class="hard" id="front"> 
+                    <div class="container mt-3 d-flex align-items-center flex-column" id="front-page">
+                        <h2 id="front-page-header">{{user.username}}'s Travel Journal</h2>
+                        <blockquote><u>(Click Corners To Flip Pages, Or Pull Corners To Flip Pages)</u></blockquote>
+                    </div>
+                </div>
+                
+                {% if trips %}
+                {% for trip in trips %}
+                        <div>
+                            <div class="card" id="travel-cards">
+                                <a class="text-dark" id="pixaby-ref" href="https://pixabay.com/">Photo From Pixabay</a> 
+                                <img src="{{trip['photo']}}" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title"><u>Trip From {{trip['start_point']}} to {{trip['end_point']}}</u> 
+                                    <button class="btn btn-sm btn-primary" id="delete-trip">
+                                        <i class="fas fa-trash" data-id="{{trip.id}}"></i>
+                                    </button>
+                                    </h5>
+                                    <ul id="waypoint-list">
+                                    {% for wp in trip["waypoint_names"]|random_15 %}
+                                        <li id="waypoints-in-list">{{wp}}</li>
+                                    {% endfor %}
+                                    </ul>
+                                    <a href="#" class="btn btn-outline-info btn-small">View Trip On Map</a>
+                                </div>
+                            </div>
+                        </div>
+                {% endfor %}
+                {% endif %}
+                
+                <div class="hard"></div>
+                <div class="hard"></div>
+                <div class="hard"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/turn.min.js"></script>
+<script src="/static/user_details_classes.js"></script>
+<script src="/static/user_details.js"></script>
+{% endblock %}

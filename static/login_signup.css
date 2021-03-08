@@ -1,0 +1,29 @@
+
+body {
+    background-image:url("/static/images/travel.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#mainpage-header {
+    font-family: 'TravelerFont';
+    color: white;
+}
+#register-info {
+    font-size: 15px;
+}
+#register-info-div {
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+#forgot-pw {
+    float:right;
+    margin-right: 10px;
+}
+@media only screen and (max-width:900px) {
+    body {
+        background-size:auto !important;
+    }
+    
+}

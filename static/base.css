@@ -1,0 +1,12 @@
+@font-face {
+    font-family: "MoneraFont";
+    src:url('/static/fonts/monera_calm-webfont.woff') format("woff");
+}
+@font-face {
+    font-family:"TravelerFont";
+    src:url('/static/fonts/traveler-webfont.woff') format("woff");
+}
+@font-face {
+    font-family: "Wanderlust";
+    src:url('/static/fonts/WanderlustRegular.woff');
+}

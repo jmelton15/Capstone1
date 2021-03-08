@@ -1,0 +1,92 @@
+{% extends "base_nav.html" %}
+{% block title %} Trip Planner {% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="/static/map.css">
+<script src="/static/create_route.js"></script> 
+{% endblock %}
+{% block content %}
+<!--The div element for the map -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+                <div class="d-flex flex-row justify-content-center mt-3 mb-3">
+                    <button class="btn-success btn" id="start-btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+                        aria-expanded="false" aria-controls="collapseExample">
+                        Trip Options
+                    </button>
+                    
+                    <button class="btn btn-sm btn-outline-info mx-2" id="save-trip-btn">Save Trip</button>
+                </div>
+                <div class="collapse" id="collapseExample">
+                    <p hidden data-id={{g.user.id}} id="user_id"></p>
+                    <form method="POST">
+                        {% block token %} 
+                        {% endblock %}
+                        <div class="card card-body d-flex align-items-center" id="route-form-container">
+                            
+                                <div class="m-3">
+                                    <input class="form-control" id="origin-input" name="origin" placeholder="Starting Location"
+                                        required>
+                                </div>
+                                <div class="m-3">
+                                    <input class="form-control" id="destination-input" name="destination" placeholder="Destination"
+                                        required>
+                                </div>
+                                <div class="m-3">
+                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                                        placeholder="Enter Places You Want To Stop (i.e. Park, Museum, Burger Place, Waterpark, Gas Stations,etc)" required></textarea>
+                                </div>
+                        
+                            {% if member_status or has_trips %}
+                            <div class="d-flex flex-row">
+                                <a class="btn-outline-primary btn btn-sm mx-2" href="/users/{{user.id}}/trip">Reset Map</a>
+                                <button class="btn-info btn btn-sm" id="trip-btn">Create Trip</button>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+                <div class="container">
+                    <ol id="how-to">
+                        <li>
+                           Click "Trip Options" To Input Start Point, Stop Point, and Points of Interest 
+                        </li>
+                        <li>
+                            Points of Interest Can Be Anything From Food (i.e. ice cream) to Rest Stops, to Waterparks, You Name It!
+                        </li>
+                        <li>
+                            Click "Create Trip" To Generate Top Rated Locations In Each Point of Interest Category
+                        </li>
+                        <li>
+                            Once Your Results Are Generated, Click "Save Trip" To Save The Trip Data To Your Profile's Travel Journal
+                        </li>
+                        <li>
+                            Click The "Profile" Tab In The Navigation Bar Above To Be Redirected To Your Profile!
+                        </li>
+                        <li>
+                            Want To Read More About How The App Works? - <a class="text-info" href="/about">Click Here To Learn More!</a>
+                        </li>
+                    </ol>
+                </div>
+        </div>
+        <div class="col-md-9">
+            <div id="loader">
+                <div id="load-gif">
+                    <img src="/static/images/loading_gif_tp.gif"  alt="...">
+                    <h3 class="bg-dark text-white">Creating Your Trip! This Can Take A Moment</h3>
+                </div>
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- <div>Car Icon From <a href="https://fontawesome.com/" title="Freepik">Font Awesome</a></div>    -->
+{% endblock %}
+{% block scripts %}
+<script src="https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js"></script>  
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjXBkeGKHmGE6k4iXPddI-2ye-OXZ8k30&libraries=localContext&v=beta&callback=initMap">
+</script> 
+{% endblock %}

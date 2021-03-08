@@ -1,0 +1,34 @@
+{% extends "base_nav.html" %}
+
+{% block title %} Verify Email {% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="/static/login_signup.css">
+{% endblock %}
+
+{% block content %}
+<h1 class="display-1 text-center" id="mainpage-header">Down To The Route Of It</h1>
+<h2 class="display-1 text-center mt-2" id="mainpage-header">Send Email Verification</h2>
+<div class="container-fluid mt-5" id="homepage-img">
+    <form class="d-flex flex-column align-items-center" id="login-signup-forms" method="POST">
+        {{ form.hidden_tag() }}  <!-- add type=hidden form fields -->
+        <div class="mb-3 d-flex flex-column">
+        {% for field in form if field.widget.input_type != 'hidden' %}
+            {{field(placeholder=field.label.text,class_="form-control")}}
+            {{field.label(class_="form-label fw-bold bg-dark text-white text-center")}}
+            {% for error in field.errors %}
+            <small class="text-danger">
+                {{error}}
+            </small>
+            {% endfor %}
+        {% endfor %}
+        </div>
+        <div class="container d-flex flex-row justify-content-center align-items-center">
+            <button class="btn-info btn mx-2" id="verify-btn">Send Email Verification Link</button>
+            <a class="btn btn-outline-success btn-sm" href="/login">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

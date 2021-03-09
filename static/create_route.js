@@ -402,18 +402,23 @@ async function initMap() {
     /**
      * 
      * This function is used to encode waypoint names into url encoded strings ("str+str+ .. etc")
+     * but only if the waypoint name has spaces. Otherwise, it's just one word and can be sent as is.
+     * Usually will take in an array of string names, however, it can handle single strings as well.
      *  This is because the pixabay api for pictures needs encoded url strings to search pictures
+     * 
+     * returns a new string or array of strings that are URL encoded ("str+str+ .. etc")
      */
     function urlEncoder(waypointnames) {
-        let splitArray = [];
-        waypointnames.forEach((wp) => {
-            splitArray.push(wp.split(" "));
-        });
-        const encodedArray = [];
-        splitArray.forEach((val) => {
-            encodedArray.push(val[0] + "+" + val[1] + "+" + val[2]);
-        });
-        return encodedArray;
+        if (Array.isArray(waypointnames)) {
+            let encodedArray = [];
+            waypointnames.forEach((wp) => {
+               encodedArray.push(wp.replace(/\s+/g, "+"));
+            })
+            return encodedArray;
+        }
+        else {
+            return waypointnames.replace(/\s+/g, "+");
+        }
     }
 
     /**
@@ -455,13 +460,14 @@ async function initMap() {
             }
        });
        if (photoArray.length <= 0) {
-            let response = sendGetRequestToPixabay(savedEndPoint);
+            let response = sendGetRequestToPixabay(urlEncoder(savedEndPoint));
             if (photoArray.length <= 0) {
                 return "/static/images/default_trip.jpg";
             }
-            return response.data.hits[Math.floor(Math.random() * (response.data.hits.length))].webformatURL;
+            else { return response.data.hits[Math.floor(Math.random() * (response.data.hits.length))].webformatURL; }
+            
        }
-       return photoArray[Math.floor(Math.random() * photoArray.length)];
+       else { return photoArray[Math.floor(Math.random() * photoArray.length)]; }
     } 
 
     /**
@@ -483,8 +489,8 @@ async function initMap() {
      * 
      */
     async function saveTrip() {
-        const unpackedWaypointLatLng = [];
-        const unpackedWaypointNames = [];
+        let unpackedWaypointLatLng = [];
+        let unpackedWaypointNames = [];
         topRatedWaypoints.forEach((wp) => {
             unpackedWaypointLatLng.push(`(${wp['lat']},${wp['lng']})`);
         });
@@ -510,7 +516,7 @@ async function initMap() {
      * This function is used to verify that a non-member user isn't trying to save more trips than allowed
      */
     function checkMemberStatus() {
-        if (savedTripCount >= 1 && !memberStatus) {
+        if (savedTripCount >= 2 && !memberStatus) {
             return false;
         }
         return true;

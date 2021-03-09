@@ -454,7 +454,7 @@ def can_save_trip():
     """ Checks if a user can still save a trip.
         This check is in place to only allow members to save more than 1 trip
     """
-    if session["saved_trips"] >= 1:
+    if session["saved_trips"] >= 2:
         return False
     else:
         return True

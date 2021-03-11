@@ -34,6 +34,7 @@ class ApiFunctionsTestCase(TestCase):
         """Create test client, add sample data."""
         
         self.coordinates_list = [[42.9634,-85.6681],[41.7075,-86.8950],[41.8781,-87.6298]]
+        self.tuple_array = [(42.9634,-85.6681),(41.7075,-86.8950),(41.8781,-87.6298)]
         self.waypoints = ["State Park","Ice Cream"]
         self.initial_coord = (42.9634,-85.6681)
         self.last_coord = (41.8781,-87.6298)
@@ -54,18 +55,18 @@ class ApiFunctionsTestCase(TestCase):
         This function takes in data from a nearbyplaces request to 
         Google API and returns an individual object nested in an array.
         Should return:
-        [{'name':place['name'],'rating':place['rating'],'address':place['vicinity'],
+        {'name':place['name'],'rating':place['rating'],'address':place['vicinity'],
           'lat':place['geometry']['location']['lat'],'lng':place['geometry']['location']['lng'],
           'icon':place['icon'],'place_id':place['place_id']}
         """
         top_rated = map_client.sort_top_rated_locations(self.nearby_places_data)
         
-        self.assertEqual(top_rated,[{
+        self.assertEqual(top_rated,{
             'name':"Scooper's Ice Cream Shoppe",'rating':5.0,
             'address':'591 Ada Dr SE, Ada','lat':42.9544878,'lng':-85.4886045,
             'icon':'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/shopping-71.png',
             'place_id':'ChIJc265W7dRGIgRyZ5tMyesmSY'
-        }])
+        })
     
     def test_get_distance_between_two_coords(self):
         """ Tests the get_distance_between_two_coords() function found
@@ -109,17 +110,12 @@ class ApiFunctionsTestCase(TestCase):
             this also returns an array of objects based on the number of waypoints
             [{},{}] etc.
         """
-        stored_objs = {0:[{'State Park':[{'name':'bobs burgers'}],'Ice Cream':[{'name':'Scoopers'}]}]}
+        stored_objs = {0:[{'State Park':{'name':'bobs burgers'},'Ice Cream':{'name':'Scoopers'}}]}
         waypoints = self.waypoints
         coordinates = self.coordinates_list
         place_count = 0
         without_i_param = map_client.iterate_over_waypoints(stored_objs,waypoints,coordinates,place_count,initial_coord=self.initial_coord)
-        data_should_be = {'address':"2215 Ottawa Beach Rd, Holland",
-                          "name":"Holland State Park","lat":42.77926120000001,
-                          "lng":-86.1989545,"rating":4.7,
-                          "place_id":"ChIJS2NTTOr0GYgRbNa9Q_6WZ90",
-                          "icon":"https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png"}
-        self.assertEqual(without_i_param[0]['State Park'][0],data_should_be)
+        self.assertEqual(type(without_i_param[0]['State Park']),dict)
         
     def test_get_places_nearby_sorted(self):
         """ Tests the get_places_nearby_sorted() function found in the
@@ -134,3 +130,15 @@ class ApiFunctionsTestCase(TestCase):
         json_data = map_client.get_places_nearby_sorted(self.coordinates_list,self.waypoints)
         
         self.assertEqual(type(json_data),dict)
+        
+    def test_unpack_decoded_coords(self):
+        """ Tests unpacking decoded coords from form array of tuples: [(int,int),(int,int)]
+            to form array of dicts: [{'lat':int,'lng':int}, etc..]
+        """
+        data = map_client.unpack_decoded_coords(self.tuple_array)
+        should_be = [
+            {'lat':42.9634,'lng':-85.6681},
+            {'lat':41.7075,'lng':-86.8950},
+            {'lat':41.8781,'lng':-87.6298}
+        ]
+        self.assertEqual(data,should_be)

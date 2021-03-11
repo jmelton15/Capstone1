@@ -1,6 +1,7 @@
 async function initMap() {
     const pixabay_key = keys.pixabay;
     $("#load-gif").hide();
+    const googleURL = "https://www.google.com/search?q="
     // const BASE_URL = "https://downtotherouteofit.herokuapp.com";
     const BASE_URL = "http://127.0.0.1:5000"
     const $currentUserID = $("#user_id").data("id")
@@ -155,13 +156,15 @@ async function initMap() {
             if (waypoints[wp] == []) {
                 continue;
             }
-            waypoints[wp].forEach(function(point) {
+            waypoints[wp].forEach(function(point,i) {
                 for (const place in point) {
-                    namesArray.push(`<div class="d-flex flex-column">
-                                        <h1>${point[place]['name']}</h1>
-                                        <blockquote>${point[place]['address']}</blockquote>
-                                        </div>
-                                    `);
+                    namesArray.push(
+                        `<div class="d-flex flex-column">
+                            <h1>${point[place]['name']}</h1>
+                            <blockquote>${point[place]['address']}</blockquote>
+                            <a href="${googleURL}${urlEncoder(point[place]['name'])}+${urlEncoder(point[place]['address'])}">Find It On The Web!</a>
+                        </div>`
+                    );
                 }
             });
         }
@@ -175,13 +178,13 @@ async function initMap() {
             }
             waypoints[wp].forEach(function(point) {
                 for (const place in point) {
-                    let name = point[place]['name'];
-                    let icon = point[place]['icon'];
-                    let place_id = point[place]['place_id'];
-                    waypointInfo.push({ 'name':name,
-                                        'icon':icon,
-                                        'place_id':place_id
-                                    });
+                    waypointInfo.push(
+                        {   'name':point[place]['name'],
+                            'address':point[place]['address'],
+                            'icon':point[place]['icon'],
+                            'place_id':point[place]['place_id']
+                        }
+                    );
                 }
             });
         }
@@ -491,20 +494,22 @@ async function initMap() {
     async function saveTrip() {
         let unpackedWaypointLatLng = [];
         let unpackedWaypointNames = [];
+        let unpackedWaypointAddresses = [];
         topRatedWaypoints.forEach((wp) => {
             unpackedWaypointLatLng.push(`(${wp['lat']},${wp['lng']})`);
         });
         waypointData.forEach((wp) => {
             unpackedWaypointNames.push(wp['name']);
-                    
+            unpackedWaypointAddresses.push(wp['address']);
         });
         let encodedPointNames = urlEncoder(unpackedWaypointNames);
         let randomPhoto = await getRandomTripPhoto(encodedPointNames);
         let response = await axios.post(`${BASE_URL}/users/${$currentUserID}/trips/save`,
-            {
+            { 
                 "start_point":savedStartPoint,
                 "end_point":savedEndPoint,
                 "waypoint_names":unpackedWaypointNames,
+                "waypoint_addresses":unpackedWaypointAddresses,
                 "waypoint_latlng":unpackedWaypointLatLng,
                 "photo": randomPhoto
             }

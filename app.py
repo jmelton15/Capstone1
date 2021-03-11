@@ -1,6 +1,7 @@
 from config_files import keys
 import os
 import random
+import json
 from flask import Flask, request,render_template,redirect,flash,session,flash,g,jsonify
 from flask_mail import Mail, Message
 from jinja2 import Environment, PackageLoader, select_autoescape
@@ -19,7 +20,7 @@ from map_client import get_places_nearby_sorted
 CURR_USER_KEY = "curr_user"
 MEMBER_STATUS = "member_status"
 CSRF_TOKEN_KEY = None
-
+ 
 
 app = Flask(__name__)
 
@@ -45,7 +46,7 @@ app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME')
 
 mail = Mail(app)
 connect_db(app)
-# db.create_all()
+db.create_all()
 
 ######################################################################
 # Session handling for logged in users 
@@ -187,7 +188,7 @@ def show_user_profile(user_id):
     if not g.user:
         flash("Unauthorized Access. This Is Not Your Account", "alert-primary")
         redirect("/login")
-    user = User.query.get_or_404(user_id)
+    user = User.query.get_or_404(user_id) 
     form = EditUsername()
     trips = user.trips
     decoded_trips = [trip.decrypt_trip_data() for trip in trips]
@@ -324,7 +325,21 @@ def save_trip_for_user(user_id):
     flash("Could Not Validate Data.","alert-danger")
     return redirect(f'/users/{user_id}/trip')
 
-
+@app.route('/users/<int:user_id>/trips/<int:trip_id>/show',methods=["GET"])
+def remake_saved_trip(user_id,trip_id):
+    """ Handles remaking a user's saved trip on the map for them to see again
+    """
+    if not g.user:
+        flash("This is not your trip. Please Login or Create an Account","alert-primary")
+        return redirect("/login")
+    trip = Trip.query.get_or_404(trip_id)
+    if trip:
+        decoded_trip_obj = trip.decrypt_trip_data()
+        return render_template("/user_profile/show_saved_trip.html",trip=trip,trip_info=json.dumps(decoded_trip_obj))
+    flash("Unable To Find Trip","alert-primary")
+    return redirect('/main')
+            
+    
 ########################################################################################
 ## FUNCTIONS FOR MAP INTERACTION ##
 
@@ -335,21 +350,22 @@ def get_trip_request_data(request_data):
     """
     path_points = request_data["points"]
     waypoints = request_data["waypoints"]
-    return get_places_nearby_sorted(path_points,waypoints)
+    return get_places_nearby_sorted(path_points,waypoints) 
 
 def save_trip_data(request_data,user_id):
     """ Handles gathering request data when a user saves their trip details.
-        This will encrypt their trip details and store the encrypted data in the 
+        This will encrypt their trip details and store the encrypted data in the  
         database for later access
     """
     # sp and ep should be regular strings
     start_point = request_data["start_point"]
     end_point = request_data["end_point"]
     waypoint_names = request_data['waypoint_names'] # names of every waypoint
+    waypoint_addresses = request_data['waypoint_addresses']
     waypoint_latlng = request_data["waypoint_latlng"] # This should be string tuples ["(lat,lng)","(lat,lng)"]
     photo = request_data["photo"]
     
-    saved_trip = Trip.encrypt_and_store_trip_data(start_point,end_point,waypoint_names,waypoint_latlng,
+    saved_trip = Trip.encrypt_and_store_trip_data(start_point,end_point,waypoint_names,waypoint_addresses,waypoint_latlng,
                                                   photo,user_id)
     
     if saved_trip:

@@ -31,6 +31,15 @@ def get_directions(start,stop,mode="driving",departure_time=now):
     return directions_result
 
 
+def unpack_decoded_coords(decoded_coordinates):
+    """ Handles turning decoded coordinates that is an array of tuples into an array of-
+        objects in the form of:
+        ex: [{lat:<int>,lng:<int>}, etc...]
+        This will allow the client side Google API to display markers
+    """
+    return [{'lat':tupe[0],'lng':tupe[1]} for tupe in decoded_coordinates]
+    
+    
 def get_places_nearby_sorted(coordinates, waypoints):
     """ Takes in a nested array of lat,lng points [[lat,lng],[lat,lng]] etc. and an array
         of waypoints. 

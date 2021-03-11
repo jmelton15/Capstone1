@@ -1,0 +1,70 @@
+{% extends "base_nav.html" %}
+{% block title %} Trip Planner {% endblock %}
+{% block stylesheets %}
+{% if trip_info %}
+<meta id="trip-info" data-info="{{trip_info}}">
+{% endif %}
+<link rel="stylesheet" href="/static/map.css">
+<script src="/static/show_saved_trip.js"></script>
+{% endblock %}
+{% block content %}
+<!--The div element for the map -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="d-flex flex-row justify-content-center mt-3 mb-3">
+                <button class="btn-success btn" id="start-btn" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    Trip Options
+                </button>
+            </div>
+            <div class="collapse" id="collapseExample">
+                <p hidden data-id={{trip.user.id}} id="user_id"></p>
+            </div>
+            <div class="container">
+                <ol id="how-to">
+                    <li>
+                        Click "Trip Options" To Input Start Point, Stop Point, and Points of Interest
+                    </li>
+                    <li>
+                        Points of Interest Can Be Anything From Food (i.e. ice cream) to Rest Stops, to Waterparks, You
+                        Name It!
+                    </li>
+                    <li>
+                        Click "Create Trip" To Generate Top Rated Locations In Each Point of Interest Category
+                    </li>
+                    <li>
+                        Once Your Results Are Generated, Click "Save Trip" To Save The Trip Data To Your Profile's
+                        Travel Journal
+                    </li>
+                    <li>
+                        Click The "Profile" Tab In The Navigation Bar Above To Be Redirected To Your Profile!
+                    </li>
+                    <li>
+                        Want To Read More About How The App Works? - <a class="text-info" href="/about">Click Here To
+                            Learn More!</a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div id="loader">
+                <!-- <div id="load-gif">
+                    <img src="/static/images/loading_gif_tp.gif" alt="...">
+                    <h3 class="bg-dark text-white">Repopulating Your Trip! This Can Take A Moment</h3>
+                </div> -->
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- <div>Car Icon From <a href="https://fontawesome.com/" title="Freepik">Font Awesome</a></div>    -->
+{% endblock %}
+{% block scripts %}
+<script src="https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js"></script>
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjXBkeGKHmGE6k4iXPddI-2ye-OXZ8k30&libraries=localContext&v=beta&callback=initMap">
+    </script>
+{% endblock %}

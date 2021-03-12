@@ -15,7 +15,7 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#data-storage">Data Storage And Safety</a></li>
+    <li><a href="#data-storage-and-safety">Data Storage And Safety</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -68,7 +68,7 @@ I plan on spending the summer learning new things and then applying it to this a
 * [PIXABAY API](https://pixabay.com/)
 
 
-<!-- Getting Started -->
+<!-- GETTING STARTED -->
 ## Getting Started
 
 On the website, you will have access to multiple places that will help you use the site and navigate your way around.
@@ -105,7 +105,7 @@ I added in the travel journal idea because I believe this application has lots o
 opens up worlds where there is the ability to like and comment on other users' trips, Share travel journals with friends, etc.
 But the travel journal also gives users a way to come back to their saved data and use it again.
 
-<!-- Data Storage And Safety -->
+<!-- DATA STORAGE AND SAFETY -->
 ## Data Storage And Safety
 
 Everything that is stored to be used later is encrypted and secured while stored. Decoding alogorithms are in places to bring back the stored data to be used

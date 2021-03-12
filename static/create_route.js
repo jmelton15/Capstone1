@@ -415,8 +415,9 @@ async function initMap() {
     /**
      * 
      * This function is used to generate a random photo url out of anywhere from 1-200 photos
-     *  This allows for more versatile and unique travel journals for everyone
-     * If the function finds no photos from pixabay, it goes to a default photo on the server
+     *  This allows for more versatile and unique travel journals for everyone.
+     * If the waypoint names don't return any pictures from Pixabay, then we do one more request with the user's end point name.
+     * If the function finds no photos from both of the above then it goes to a default photo on the server
      * 
      */
     async function getRandomTripPhoto(waypointNames) {
@@ -430,6 +431,9 @@ async function initMap() {
         }
         if (pixabayData.hits.length === 0) {
             pixabayData = await sendGetRequestToPixabay(savedEndPoint);
+            if (pixabayData.hits.length === 0) {
+                return "static/images/default_trip.jpg";
+            }
         } 
         return pixabayData.hits[Math.floor(Math.random()*pixabayData.hits.length)].webformatURL;
     } 
@@ -443,6 +447,7 @@ async function initMap() {
                 "start_point":savedStartPoint,
                 "end_point":savedEndPoint,
                 "waypoint_names":unpackedWaypointNames,
+                "waypoint_addresses":unpackedWaypointAddresses,
                 "waypoint_latlng":unpackedWaypointLatLng,
                 "photo": randomPhoto
             }

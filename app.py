@@ -46,7 +46,7 @@ app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME')
 
 mail = Mail(app)
 connect_db(app)
-db.create_all()
+# db.create_all()
 
 ######################################################################
 # Session handling for logged in users 

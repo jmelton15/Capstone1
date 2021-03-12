@@ -41,17 +41,14 @@ async function initMap() {
      * map handles setting up the map on the webpage
      * the options object is passed to the Map() method to tell the map how to load initially
      */
-    const directionsService = new google.maps.DirectionsService();
-    // const directionsRenderer = new google.maps.DirectionsRenderer({
-    //     draggable: true,
-    // });
-    const geocoder = new google.maps.Geocoder();
-    let options = {
-        zoom:4,
-        center:{lat:37.0902 ,lng:-95.7129} //start map on zoomed out united states, center
-    };
-    const map = new google.maps.Map(document.getElementById("map"),options);
-    // await directionsRenderer.setMap(map);
+     const directionsService = new google.maps.DirectionsService();
+     const geocoder = new google.maps.Geocoder();
+     let options = {
+         zoom:4,
+         center:{lat:37.0902 ,lng:-95.7129} //start map on zoomed out united states, center
+     };
+     const map = new google.maps.Map(document.getElementById("map"),options);
+    
 
  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  /** CREATING MAP MARKERS **/
@@ -61,33 +58,14 @@ async function initMap() {
      * It sends a request to google.maps.Marker() with the parameters from the function and returns an array of markers
      *
      */
-    // function createMarkerClusterer(topRatedWaypoints,infoWindowContent,waypointData) {
-    //     const markers = topRatedWaypoints.map(function(waypoint, i) {
-    //         const marker = new google.maps.Marker({
-    //             position: waypoint,
-    //             icon:waypointData[i]['icon'],
-    //             label: (i+1).toString(),
-    //             animation:google.maps.Animation.DROP,
-    //         });
-            // const infowindow = new google.maps.InfoWindow({
-            //     content:infoWindowContent[i],
-            // });
-            // marker.addListener("click", () => {
-            //     infowindow.open(map,marker);
-            // });
-    //         return marker;
-    //     });
-    //     return markers;
-    // }
+    
     function createMarkers(topRatedWaypoints,infoWindowContent,waypointData) {
         const markers = topRatedWaypoints.map(function(waypoint,i) {
             addNonClusterMarkers(waypoint,i,infoWindowContent,waypointData);
         })
         return markers;
     }
-    // topRatedWaypoints.forEach((val,i) => {
-    //     addNonClusterMarkers(val,i);
-    // });
+    
     function addNonClusterMarkers(location,i,infoWindowContent,waypointData) {
         const marker = new google.maps.Marker({
             position:location,
@@ -114,8 +92,6 @@ async function initMap() {
         });
 
     }
-
-
 
 
 
@@ -156,7 +132,7 @@ async function initMap() {
             if (waypoints[wp] == []) {
                 continue;
             }
-            waypoints[wp].forEach(function(point,i) {
+            waypoints[wp].forEach(function(point) {
                 for (const place in point) {
                     namesArray.push(
                         `<div class="d-flex flex-column">
@@ -332,12 +308,7 @@ async function initMap() {
             waypointData = createWaypointDataArray(filteredWaypoints); //extra info about each waypoint
                 
             savedMarkers = createMarkers(topRatedWaypoints,infoWindowContent,waypointData);
-    
-            // savedMarkers = createMarkerClusterer(topRatedWaypoints,infoWindowContent,waypointData);
-            // await new MarkerClusterer(map,savedMarkers, {
-            //     imagePath:
-            //       "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
-            // });
+
             return;
         }
         return;
@@ -438,7 +409,7 @@ async function initMap() {
                 per_page:200
             }
         });
-        return response;
+        return response.data;
     }
 
     /**
@@ -448,29 +419,19 @@ async function initMap() {
      * If the function finds no photos from pixabay, it goes to a default photo on the server
      * 
      */
-    async function getRandomTripPhoto(encodedWaypointNames) {
-        let photoArray = [];
-        encodedWaypointNames.forEach(async function(wp) {
-            let filteredArray = [];
-            let response = await sendGetRequestToPixabay(wp);
-            if (response.data.hits.length > 0) {
-                response.data.hits.forEach((photo) => {
-                    if (photo.webformatURL) {
-                        filteredArray.push(photo.webformatURL);
-                    }
-                });
-                photoArray.push(filteredArray[Math.floor(Math.random() * filteredArray.length)]);
-            }
-       });
-       if (photoArray.length <= 0) {
-            let response = sendGetRequestToPixabay(urlEncoder(savedEndPoint));
-            if (photoArray.length <= 0) {
-                return "/static/images/default_trip.jpg";
-            }
-            else { return response.data.hits[Math.floor(Math.random() * (response.data.hits.length))].webformatURL; }
-            
-       }
-       else { return photoArray[Math.floor(Math.random() * photoArray.length)]; }
+    async function getRandomTripPhoto(waypointNames) {
+        console.log(waypointNames);
+        let pixabayData = [];
+        while (waypointNames.length > 1) {
+            let randomName = waypointNames[Math.floor(Math.random()*waypointNames.length)];
+            waypointNames.pop(waypointNames.indexOf(randomName));
+            pixabayData = await sendGetRequestToPixabay(randomName);
+            if (pixabayData.hits.length > 0) break;
+        }
+        if (pixabayData.hits.length === 0) {
+            pixabayData = await sendGetRequestToPixabay(savedEndPoint);
+        } 
+        return pixabayData.hits[Math.floor(Math.random()*pixabayData.hits.length)].webformatURL;
     } 
 
     /**

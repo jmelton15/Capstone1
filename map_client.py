@@ -12,25 +12,6 @@ GOOGLE_API_KEY = keys["GOOGLE_API_KEY"]
 gmaps = googlemaps.Client(key=GOOGLE_API_KEY)
 now = datetime.now()
 
-def get_latlng(address):
-    """ Takes in a human-readable address and returns the lat,lng data
-    """
-    geocode_result = gmaps.geocode(address)
-    return geocode
-# geocode_result = get_latlng('1700 Madison St.')
-# print(geocode_result[0]['geometry']['location']['lat'],geocode_result[0]['geometry']['location']['lng'])
-
-def get_directions(start,stop,mode="driving",departure_time=now):
-    """ Gets directions data from google maps
-    """
-    
-    directions_result = gmaps.directions("Sydney Town Hall",
-                                    "Parramatta, NSW",
-                                    mode="driving",
-                                    departure_time=now)
-    return directions_result
-
-
 def unpack_decoded_coords(decoded_coordinates):
     """ Handles turning decoded coordinates that is an array of tuples into an array of-
         objects in the form of:
@@ -146,24 +127,3 @@ def sort_top_rated_locations(data):
                         'icon':d['icon'],'place_id':d['place_id']}
             return top_rated
     return None
- 
- 
-def extract_ids(search_result):
-    """ Takes a search result and returns the place_ids of all the results
-    """
-    ids = []
-    for place in search_result:
-        ids.append(place['place_id'])
-    return ids
-
-
-def lat_lng(search_result):
-    """ Generator function that returns one lat,lng tuple at a time from 
-        places search results
-        Can be used to send back individual waypoints to JavaScript
-    """
-    for place in search_result:
-#       [(place['geometry']['location']['lat'],place['geometry']['location']['lng']) for place in r]
-        lat = place['geometry']['location']['lat']
-        lng = place['geometry']['location']['lng']
-        yield (lat,lng)

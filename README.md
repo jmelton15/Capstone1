@@ -15,7 +15,7 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li><a href="#data-storage">Data Storage And Safety</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -40,7 +40,14 @@ places you want to have on your trip. Users can then save their trip and the app
 on their profile page.
 
 Despite being up and running, this web application is definitely a baby. Any feedback, tips, ideas, or even bugs that you may find while trying it out,
-please let me know! 
+please let me know!
+
+### Future Plans
+
+The code is still a 'baby' and I will be refactoring and cleaning it up as I continue to work on it and add new features. Bare with me if it isn't as clean as it can be
+as I am new to development and trying out many new things. With that said, I am always open to suggestions and ideas! If something stands out to you that I did well, or that I can improve upon, feel free to reach out to me at the email in the contact section!
+
+I plan on spending the summer learning new things and then applying it to this application. I'd like to make my database bigger and add more elements to store. With that, I'd like to make algorithms that will populate trips solely from my database as more and more popular trips appear in it. This will allow for quicker load times over time. I'd also like to create a social system like I mentioned above where users can interact with other user's pages/trips, maybe leave notes in eachother's journals, have globally saved trips for people to view, allow user's to recommend trips, etc! The list goes on! 
 
 ### Built With - Credits To The Following:
 
@@ -81,11 +88,12 @@ Steps to navigate smoothly are as follows (however, there are many ways to navig
 9. When using the app for the first time, bare-with the loading time if you are travling a long distance and looking for many points of interest along the way.
 Once the app has been used, the load times decrease exponentially, but there are a lot of checks that the program does to make sure it gets you a solid
 amount of non-duplicated results and makes sure that the results represent top-rated places.
-10. Once you have successfully created a trip, click the "Save Trip" button found on the left hand side of the page by the trip form
-11. A pop up alert should show up stating that your trip has been saved to your profile! Go have a look, your trip information including a photo should 
+10. Each point of interest marker on the map is clickable. It will display the name, address, and a link to search the location online!  
+11. Once you have successfully created a trip, click the "Save Trip" button found on the left hand side of the page by the trip form
+12. A pop up alert should show up stating that your trip has been saved to your profile! Go have a look, your trip information including a photo should 
 now be inside your travel journal; turn the pages!
-12. You have now successfully completed a smooth create and save transaction!
-
+13. You have now successfully completed a smooth create and save transaction!
+14. From here, in your travel journal, you can click the button under each trip and it will remake your trip again on the map for you to see.
 
 
 ## Reasons Behind API Choice and Site Ideas
@@ -93,17 +101,21 @@ now be inside your travel journal; turn the pages!
 I opted to use Google Maps as my mapping API because of their nearby_places integration and depth. I have limited the number of trips users can make 
 in order to prevent making too many requests to Google since it can become a non-free entity at that point. 
 
-
 I added in the travel journal idea because I believe this application has lots of room for growth and expansion as time permits me. The travel journal
 opens up worlds where there is the ability to like and comment on other users' trips, Share travel journals with friends, etc.
 But the travel journal also gives users a way to come back to their saved data and use it again.
 
+<!-- Data Storage And Safety -->
+## Data Storage And Safety
+
+Everything that is stored to be used later is encrypted and secured while stored. Decoding alogorithms are in places to bring back the stored data to be used
+on the client side when asked by that specific user. I may have went a little overboard with the encryption even, but it was fun to learn and good practice! 
 
 <!-- CONTACT -->
 ## Contact
 
 Your Name - [John Melton]
-
+Email - [johnmelton.projects@gmail.com]
 Project Link: [https://github.com/jmelton15/DTRI](https://github.com/jmelton15/DTRI)
 
 
